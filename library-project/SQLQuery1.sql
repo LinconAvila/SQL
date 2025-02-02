@@ -1,0 +1,46 @@
+CREATE DATABASE Library;
+
+CREATE TABLE Author (
+IdAuthor SMALLINT IDENTITY,
+NameAuthor VARCHAR(50) NOT NULL,
+LastNameAuthor VARCHAR(60) NOT NULL,
+CONSTRAINT pk_id_author PRIMARY KEY(IdAuthor),
+CONSTRAINT unique_author UNIQUE(NameAuthor, LastNameAuthor)
+);
+
+CREATE TABLE Publisher (
+IdPublisher SMALLINT PRIMARY KEY IDENTITY,
+NamePublisher VARCHAR(50) NOT NULL,
+CONSTRAINT unique_publisher UNIQUE(NamePublisher)
+);
+
+CREATE TABLE Subjects (
+IdSubject TINYINT PRIMARY KEY IDENTITY,
+NameSubject VARCHAR(25) NOT NULL,
+CONSTRAINT unique_subject UNIQUE(NameSubject)
+);
+
+CREATE TABLE Book (
+IdBook SMALLINT NOT NULL PRIMARY KEY IDENTITY(100,1),
+NameBook VARCHAR(70) NOT NULL,
+ISBN13 CHAR(13) UNIQUE NOT NULL,
+PubDate DATE,
+PriceBook MONEY NOT NULL CHECK(PriceBook >= 0),
+NumberPages SMALLINT NOT NULL,
+IdPublisher SMALLINT NOT NULL,
+IdSubject TINYINT NOT NULL,
+CONSTRAINT fk_id_publisher FOREIGN KEY(IdPublisher)
+    REFERENCES Publisher(IdPublisher) ON DELETE CASCADE,
+CONSTRAINT fk_id_subject FOREIGN KEY(IdSubject)
+    REFERENCES Subjects(IdSubject) ON DELETE CASCADE
+);
+
+CREATE TABLE BookAuthor (
+IdBook SMALLINT NOT NULL,
+IdAuthor SMALLINT NOT NULL,
+CONSTRAINT fk_id_books FOREIGN KEY(IdBook)
+    REFERENCES Book(IdBook) ON DELETE CASCADE,
+CONSTRAINT fk_id_authors FOREIGN KEY(IdAuthor)
+    REFERENCES Author(IdAuthor) ON DELETE CASCADE,
+CONSTRAINT pk_book_author PRIMARY KEY(IdBook, IdAuthor)
+);
