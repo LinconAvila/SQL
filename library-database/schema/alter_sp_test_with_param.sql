@@ -1,0 +1,3 @@
+ALTER PROCEDURE sp_teste (@p1 AS INT)
+AS 
+SELECT CONCAT('Value: ', @p1) AS VALUE;
